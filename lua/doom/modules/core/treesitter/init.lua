@@ -42,8 +42,7 @@ treesitter.settings = {
 treesitter.packages = {
   ["nvim-treesitter"] = {
     "nvim-treesitter/nvim-treesitter",
-    commit = "6289410c7a4715d6e7743c4d81cf5d262e90951e",
-    run = ":TSUpdate",
+    commit = "9e8df1b3ca576eeaca4e8d48e3d67119b32adb99",
     branch = "master",
   },
   ["nvim-ts-context-commentstring"] = {
@@ -92,5 +91,13 @@ treesitter.configs["nvim-treesitter"] = function()
     end
   end, 1000)
 end
+
+treesitter.binds = {
+  { "<leader>",
+    { "D",
+      { "T", "<cmd>TSUpdate all<CR>", name = "Update treesitter grammars" }
+    }
+  }
+}
 
 return treesitter
