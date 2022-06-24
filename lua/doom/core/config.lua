@@ -5,6 +5,7 @@
 --  running the user's `config.lua` file.
 
 local utils = require("doom.utils")
+local system = require("doom.core.system")
 local config = {}
 local filename = "config.lua"
 
@@ -70,10 +71,23 @@ config.load = function()
       }
 
       local ok, result
-      for _, path in ipairs(search_paths) do
-        ok, result = xpcall(require, debug.traceback, path)
-        if ok then
-          break
+
+      -- First try modules in config directory
+      -- TODO factor with find_config
+      local user_path =
+        table.concat({
+            system.doom_configs_root,
+            "modules",
+            section_name, module_name,
+            "init.lua" }, system.sep)
+      ok, result = xpcall(dofile, debug.traceback, user_path)
+
+      if not ok then
+        for _, path in ipairs(search_paths) do
+          ok, result = xpcall(require, debug.traceback, path)
+          if ok then
+            break;
+          end
         end
       end
       if ok then
